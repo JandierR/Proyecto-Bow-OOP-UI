@@ -37,6 +37,7 @@ public class Controller {
             case 6 -> imprimirUsuarios();
             case 7 -> imprimirDepartamentos();
             case 8 -> imprimirTickets();
+            case 0 -> System.exit(0);
             default -> interfaz.imprimirMensajeLn("Valor invalido");
         }
     }
@@ -60,8 +61,16 @@ public class Controller {
 
         interfaz.imprimirMensajeLn("Usuario registrado exitosamente!");
 
+        Usuario usuario = usuarioManager.buscarUsuarioPorCorreo(usuarioManager.getListaUsuario(), correo);
 
-        usuarioManager.registrarUsuario(nombre, correo, contrasena, telefono, rol);
+        //Preguntar al profesor lo siguiente:
+        //¿Este proceso de buscar si existe un usuario con X correo, debe de ir en UsuarioManager o en Controller?
+        //Pregunto porque no se me ocurre como acceder de esa manera en el UsuarioManager al registrar un usuario y que verifique ya existe
+        if (usuarioManager.getListaUsuario().contains(usuario)) {
+            interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un usuario con este correo. Intenta de nuevo!");
+        } else {
+            usuarioManager.registrarUsuario(nombre, correo, contrasena, telefono, rol);
+        }
 
     }
 
@@ -80,7 +89,14 @@ public class Controller {
         String correo = interfaz.leerTexto();
 
         interfaz.imprimirMensajeLn("Departamento registrado exitosamente!");
-        departamentoManager.registrarDepartamento(nombreDepartamento, descripcion, correo);
+
+        Departamento departamento = departamentoManager.buscarDepartamentoPorNombre(departamentoManager.getListaDepartamento(), nombreDepartamento);
+
+        if (departamentoManager.getListaDepartamento().contains(departamento)) {
+            interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un departamento con este nombre. Intenta de nuevo!");
+        } else {
+            departamentoManager.registrarDepartamento(nombreDepartamento, descripcion, correo);
+        }
     }
 
     public void imprimirDepartamentos() {
@@ -98,7 +114,7 @@ public class Controller {
         interfaz.imprimirMensaje("Digite la descripción: ");
         String descripcion = interfaz.leerTexto();
 
-        interfaz.imprimirMensaje("Digite el estado: ");
+        interfaz.imprimirMensaje("Digite el estado (Nuevo / En Progreso / Resuelto): ");
         String estado = interfaz.leerTexto();
 
         interfaz.imprimirMensaje("Digite el correo del usuario al que pertenece el ticket: ");
