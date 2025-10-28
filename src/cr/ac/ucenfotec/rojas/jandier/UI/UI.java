@@ -12,7 +12,8 @@ public class UI {
     }
 
     public void imprimirMenu() {
-        System.out.println("""
+        imprimirMensajeLn("-".repeat(50));
+        imprimirMensajeLn("""
                 1. Registrar usuario
                 2. Registrar departamento
                 3. Registrar ticket
@@ -22,6 +23,7 @@ public class UI {
                 7. Listar departamentos
                 8. Listar tickets
                 0. Salir""");
+        imprimirMensajeLn("-".repeat(50));
     }
 
     public String leerTexto() throws IOException {
