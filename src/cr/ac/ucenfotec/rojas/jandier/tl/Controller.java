@@ -2,19 +2,20 @@ package cr.ac.ucenfotec.rojas.jandier.tl;
 
 import cr.ac.ucenfotec.rojas.jandier.UI.UI;
 import cr.ac.ucenfotec.rojas.jandier.bl.entities.Departamento;
+import cr.ac.ucenfotec.rojas.jandier.bl.entities.Ticket;
 import cr.ac.ucenfotec.rojas.jandier.bl.entities.Usuario;
-import cr.ac.ucenfotec.rojas.jandier.bl.logic.DepartamentoManager;
-import cr.ac.ucenfotec.rojas.jandier.bl.logic.TicketManager;
-import cr.ac.ucenfotec.rojas.jandier.bl.logic.UsuarioManager;
+import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorDepartamento;
+import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorTicket;
+import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorUsuario;
 
 import java.io.IOException;
 
 
 public class Controller {
     private UI interfaz = new UI();
-    private UsuarioManager usuarioManager = new UsuarioManager();
-    private DepartamentoManager departamentoManager = new DepartamentoManager();
-    private TicketManager ticketManager = new TicketManager();
+    private GestorUsuario gestorUsuario = new GestorUsuario();
+    private GestorDepartamento gestorDepartamento = new GestorDepartamento();
+    private GestorTicket gestorTicket = new GestorTicket();
 
 
     public void start() throws IOException {
@@ -59,23 +60,33 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el rol del usuario: ");
         String rol = interfaz.leerTexto();
 
+        interfaz.imprimirMensaje("Digite el #ID del usuario: ");
+        int id = Integer.parseInt(interfaz.leerTexto());
+
         interfaz.imprimirMensajeLn("Usuario registrado exitosamente!");
 
-        Usuario usuario = usuarioManager.buscarUsuarioPorCorreo(usuarioManager.getListaUsuario(), correo);
+        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.getListaUsuario(), id);
 
         //Preguntar al profesor lo siguiente:
         //¿Este proceso de buscar si existe un usuario con X correo, debe de ir en UsuarioManager o en Controller?
         //Pregunto porque no se me ocurre como acceder de esa manera en el UsuarioManager al registrar un usuario y que verifique ya existe
-        if (usuarioManager.getListaUsuario().contains(usuario)) {
+        //Retornar booleano, no objetos de negocio. Para averiguar si existe el usuario.
+        if (existeUsuario) {
             interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un usuario con este correo. Intenta de nuevo!");
         } else {
-            usuarioManager.registrarUsuario(nombre, correo, contrasena, telefono, rol);
+            gestorUsuario.registrarUsuario(nombre, correo, contrasena, telefono, rol, id);
         }
 
     }
 
     public void imprimirUsuarios() {
-        interfaz.imprimirMensajeLn(usuarioManager.getListaUsuario().toString());
+        if (gestorUsuario.getListaUsuario().isEmpty()) {
+            interfaz.imprimirMensajeLn("[Lista vacía]");
+        } else {
+            for (Usuario usuario : gestorUsuario.getListaUsuario()) {
+                interfaz.imprimirMensajeLn(usuario.toString());
+            }
+        }
     }
 
     public void registrarDepartamento() throws IOException {
@@ -88,19 +99,28 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el correo del departamento: ");
         String correo = interfaz.leerTexto();
 
+        interfaz.imprimirMensaje("Digite el #ID del departamento: ");
+        int id = Integer.parseInt(interfaz.leerTexto());
+
         interfaz.imprimirMensajeLn("Departamento registrado exitosamente!");
 
-        Departamento departamento = departamentoManager.buscarDepartamentoPorNombre(departamentoManager.getListaDepartamento(), nombreDepartamento);
+        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), id);
 
-        if (departamentoManager.getListaDepartamento().contains(departamento)) {
+        if (existeDepartamento) {
             interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un departamento con este nombre. Intenta de nuevo!");
         } else {
-            departamentoManager.registrarDepartamento(nombreDepartamento, descripcion, correo);
+            gestorDepartamento.registrarDepartamento(nombreDepartamento, descripcion, correo, id);
         }
     }
 
     public void imprimirDepartamentos() {
-        interfaz.imprimirMensajeLn(departamentoManager.getListaDepartamento().toString());
+        if (gestorDepartamento.getListaDepartamento().isEmpty()) {
+            interfaz.imprimirMensajeLn("[Lista vacía]");
+        } else {
+            for (Departamento departamento : gestorDepartamento.getListaDepartamento()) {
+                interfaz.imprimirMensajeLn(departamento.toString());
+            }
+        }
     }
 
     public void registrarTicket() throws IOException {
@@ -117,34 +137,48 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el estado (Nuevo / En Progreso / Resuelto): ");
         String estado = interfaz.leerTexto();
 
-        interfaz.imprimirMensaje("Digite el correo del usuario al que pertenece el ticket: ");
-        String correoUsuario = interfaz.leerTexto();
+        interfaz.imprimirMensaje("Digite el #ID del usuario: ");
+        int idUsuario = Integer.parseInt(interfaz.leerTexto());
 
-//        Usuario usuarioTmp = new Usuario(correo);
-        Usuario usuario = usuarioManager.buscarUsuarioPorCorreo(usuarioManager.getListaUsuario(), correoUsuario);
+        interfaz.imprimirMensaje("Digite el #ID del departamento: ");
+        int idDepartamento = Integer.parseInt(interfaz.leerTexto());
 
-        interfaz.imprimirMensaje("Digite el nombre del departamento al que pertenece el ticket: ");
-        String correoDepartamento = interfaz.leerTexto();
+        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.getListaUsuario(), idUsuario);
+        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), idDepartamento);
 
-        Departamento departamento = departamentoManager.buscarDepartamentoPorNombre(departamentoManager.getListaDepartamento(), correoDepartamento);
+        if (existeUsuario && existeDepartamento) {
+            interfaz.imprimirMensajeLn("Ticket registrado exitosamente!");
+            gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento);
 
-        if (usuario == null) {
-            if (departamento == null) {
-                interfaz.imprimirMensajeLn("Lo sentimos. Este usuario no existe!");
-                interfaz.imprimirMensajeLn("Lo sentimos. Este departamento no existe!");
-                return;
-            }
+        } else {
+            interfaz.imprimirMensajeLn("Lo sentimos. El usuario o departamento no existe!");
         }
 
-        interfaz.imprimirMensajeLn("Ticket registrado exitosamente!");
-        ticketManager.registrarTicket(id, asunto, descripcion, estado, usuario, departamento);
     }
+//        interfaz.imprimirMensaje("Digite el correo del usuario al que pertenece el ticket: ");
+//        String correoUsuario = interfaz.leerTexto();
+//        boolean existeUsuario = usuarioManager.existeUsuario(usuarioManager.getListaUsuario(), correoUsuario);
+//
+//        interfaz.imprimirMensaje("Digite el nombre del departamento al que pertenece el ticket: ");
+//        String correoDepartamento = interfaz.leerTexto();
+//
+//        boolean existeDepartamento = departamentoManager.existeDepartamento(departamentoManager.getListaDepartamento(), correoDepartamento);
+//
+//        if (!existeUsuario) {
+//            if (!existeDepartamento) {
+//                interfaz.imprimirMensajeLn("Lo sentimos. Este usuario no existe!");
+//                interfaz.imprimirMensajeLn("Lo sentimos. Este departamento no existe!");
+//                return;
+//            }
+//        }
 
     public void imprimirTickets() {
-        if (ticketManager.getListaTickets().isEmpty()) {
+        if (gestorTicket.getListaTickets().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
-            interfaz.imprimirMensajeLn(ticketManager.getListaTickets().toString());
+            for (Ticket ticket : gestorTicket.getListaTickets()) {
+                interfaz.imprimirMensajeLn(ticket.toString());
+            }
         }
     }
 }
