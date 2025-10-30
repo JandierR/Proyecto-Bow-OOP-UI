@@ -18,6 +18,9 @@ public class Controller {
     private GestorTicket gestorTicket = new GestorTicket();
 
 
+    public Controller() {
+    }
+
     public void start() throws IOException {
         int opcion;
 
