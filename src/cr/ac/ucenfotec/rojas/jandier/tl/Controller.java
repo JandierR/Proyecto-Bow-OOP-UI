@@ -80,9 +80,11 @@ public class Controller {
     }
 
     public void imprimirUsuarios() {
+        //Este condicional verifica si la lista esta vacia
         if (gestorUsuario.getListaUsuario().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
+            //En este caso que no este vacia la lista, se imprime sus elementos.
             for (Usuario usuario : gestorUsuario.getListaUsuario()) {
                 interfaz.imprimirMensajeLn(usuario.toString());
             }
@@ -104,8 +106,11 @@ public class Controller {
 
         interfaz.imprimirMensajeLn("Departamento registrado exitosamente!");
 
+        //Este booleano verifica si ya existe un departamento con base a su ID, con el metodo existeDepartamento de la clase GestorDepartamento
         boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), id);
 
+        //Aca se verifica si existe o no un departamento con tal ID.
+        //Esta condicional es importante, ya que no se permiten departamentos duplicados.
         if (existeDepartamento) {
             interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un departamento con este nombre. Intenta de nuevo!");
         } else {
@@ -114,9 +119,11 @@ public class Controller {
     }
 
     public void imprimirDepartamentos() {
+        //Este condicional verifica si la lista esta vacia
         if (gestorDepartamento.getListaDepartamento().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
+            //En este caso que no este vacia la lista, se imprime sus elementos.
             for (Departamento departamento : gestorDepartamento.getListaDepartamento()) {
                 interfaz.imprimirMensajeLn(departamento.toString());
             }
@@ -143,9 +150,12 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el #ID del departamento: ");
         int idDepartamento = Integer.parseInt(interfaz.leerTexto());
 
+        //Estos siguientes dos booleanos --> existeUsuario y existeDepartamento, ambos utilizan sus metodos
+        //existeUsuario y existeDepartamento, para verificar la existencia de ambos con base a su ID unicos
         boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.getListaUsuario(), idUsuario);
         boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), idDepartamento);
 
+        //Si ambos usuario y departamento existen, entonces se registra exitosamente el ticket.
         if (existeUsuario && existeDepartamento) {
             interfaz.imprimirMensajeLn("Ticket registrado exitosamente!");
             gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento);
@@ -155,27 +165,13 @@ public class Controller {
         }
 
     }
-//        interfaz.imprimirMensaje("Digite el correo del usuario al que pertenece el ticket: ");
-//        String correoUsuario = interfaz.leerTexto();
-//        boolean existeUsuario = usuarioManager.existeUsuario(usuarioManager.getListaUsuario(), correoUsuario);
-//
-//        interfaz.imprimirMensaje("Digite el nombre del departamento al que pertenece el ticket: ");
-//        String correoDepartamento = interfaz.leerTexto();
-//
-//        boolean existeDepartamento = departamentoManager.existeDepartamento(departamentoManager.getListaDepartamento(), correoDepartamento);
-//
-//        if (!existeUsuario) {
-//            if (!existeDepartamento) {
-//                interfaz.imprimirMensajeLn("Lo sentimos. Este usuario no existe!");
-//                interfaz.imprimirMensajeLn("Lo sentimos. Este departamento no existe!");
-//                return;
-//            }
-//        }
 
     public void imprimirTickets() {
+        //Este condicional verifica si la lista esta vacia
         if (gestorTicket.getListaTickets().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
+            //En este caso que no este vacia la lista, se imprime sus elementos.
             for (Ticket ticket : gestorTicket.getListaTickets()) {
                 interfaz.imprimirMensajeLn(ticket.toString());
             }
