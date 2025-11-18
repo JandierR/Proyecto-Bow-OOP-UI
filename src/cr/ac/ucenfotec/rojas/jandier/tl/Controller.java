@@ -7,18 +7,25 @@ import cr.ac.ucenfotec.rojas.jandier.bl.entities.Usuario;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorDepartamento;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorTicket;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorUsuario;
+import cr.ac.ucenfotec.rojas.jandier.dl.Data;
 
 import java.io.IOException;
 
 
 public class Controller {
-    private UI interfaz = new UI();
-    private GestorUsuario gestorUsuario = new GestorUsuario();
-    private GestorDepartamento gestorDepartamento = new GestorDepartamento();
-    private GestorTicket gestorTicket = new GestorTicket();
+    private Data data;
+    private GestorUsuario gestorUsuario;
+    private GestorDepartamento gestorDepartamento ;
+    private GestorTicket gestorTicket;
+    private UI interfaz;
 
 
     public Controller() {
+        data = new Data();
+        gestorUsuario = new GestorUsuario(data);
+        gestorDepartamento = new GestorDepartamento(data);
+        gestorTicket = new GestorTicket(data);
+        interfaz = new UI();
     }
 
     public void start() throws IOException {
@@ -68,7 +75,7 @@ public class Controller {
 
         interfaz.imprimirMensajeLn("Usuario registrado exitosamente!");
 
-        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.getListaUsuario(), id);
+        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.obtenerUsuarios(), id);
 
         //Preguntar al profesor lo siguiente:
         //¿Este proceso de buscar si existe un usuario con X correo, debe de ir en UsuarioManager o en Controller?
@@ -84,11 +91,11 @@ public class Controller {
 
     public void imprimirUsuarios() {
         //Este condicional verifica si la lista esta vacia
-        if (gestorUsuario.getListaUsuario().isEmpty()) {
+        if (gestorUsuario.obtenerUsuarios().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
             //En este caso que no este vacia la lista, se imprime sus elementos.
-            for (Usuario usuario : gestorUsuario.getListaUsuario()) {
+            for (Usuario usuario : gestorUsuario.obtenerUsuarios()) {
                 interfaz.imprimirMensajeLn(usuario.toString());
             }
         }
@@ -110,7 +117,7 @@ public class Controller {
         interfaz.imprimirMensajeLn("Departamento registrado exitosamente!");
 
         //Este booleano verifica si ya existe un departamento con base a su ID, con el metodo existeDepartamento de la clase GestorDepartamento
-        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), id);
+        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.obtenerDepartamentos(), id);
 
         //Aca se verifica si existe o no un departamento con tal ID.
         //Esta condicional es importante, ya que no se permiten departamentos duplicados.
@@ -123,11 +130,11 @@ public class Controller {
 
     public void imprimirDepartamentos() {
         //Este condicional verifica si la lista esta vacia
-        if (gestorDepartamento.getListaDepartamento().isEmpty()) {
+        if (gestorDepartamento.obtenerDepartamentos().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
             //En este caso que no este vacia la lista, se imprime sus elementos.
-            for (Departamento departamento : gestorDepartamento.getListaDepartamento()) {
+            for (Departamento departamento : gestorDepartamento.obtenerDepartamentos()) {
                 interfaz.imprimirMensajeLn(departamento.toString());
             }
         }
@@ -155,8 +162,8 @@ public class Controller {
 
         //Estos siguientes dos booleanos --> existeUsuario y existeDepartamento, ambos utilizan sus metodos
         //existeUsuario y existeDepartamento, para verificar la existencia de ambos con base a su ID unicos
-        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.getListaUsuario(), idUsuario);
-        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.getListaDepartamento(), idDepartamento);
+        boolean existeUsuario = gestorUsuario.existeUsuario(gestorUsuario.obtenerUsuarios(), idUsuario);
+        boolean existeDepartamento = gestorDepartamento.existeDepartamento(gestorDepartamento.obtenerDepartamentos(), idDepartamento);
 
         //Si ambos usuario y departamento existen, entonces se registra exitosamente el ticket.
         if (existeUsuario && existeDepartamento) {
@@ -171,11 +178,11 @@ public class Controller {
 
     public void imprimirTickets() {
         //Este condicional verifica si la lista esta vacia
-        if (gestorTicket.getListaTickets().isEmpty()) {
+        if (gestorTicket.obtenerTickets().isEmpty()) {
             interfaz.imprimirMensajeLn("[Lista vacía]");
         } else {
             //En este caso que no este vacia la lista, se imprime sus elementos.
-            for (Ticket ticket : gestorTicket.getListaTickets()) {
+            for (Ticket ticket : gestorTicket.obtenerTickets()) {
                 interfaz.imprimirMensajeLn(ticket.toString());
             }
         }
