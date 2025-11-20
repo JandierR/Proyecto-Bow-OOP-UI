@@ -22,6 +22,7 @@ public class UI {
                 6. Listar usuarios
                 7. Listar departamentos
                 8. Listar tickets
+                9. Iniciar sesión
                 0. Salir""");
         imprimirMensajeLn("-".repeat(50));
     }

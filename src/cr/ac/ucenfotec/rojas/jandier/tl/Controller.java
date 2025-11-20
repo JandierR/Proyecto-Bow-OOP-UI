@@ -7,6 +7,7 @@ import cr.ac.ucenfotec.rojas.jandier.bl.entities.Usuario;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorDepartamento;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorTicket;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.GestorUsuario;
+import cr.ac.ucenfotec.rojas.jandier.bl.logic.Login;
 import cr.ac.ucenfotec.rojas.jandier.dl.Data;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class Controller {
     private GestorUsuario gestorUsuario;
     private GestorDepartamento gestorDepartamento ;
     private GestorTicket gestorTicket;
+    private Login login;
     private UI interfaz;
 
 
@@ -25,6 +27,7 @@ public class Controller {
         gestorUsuario = new GestorUsuario(data);
         gestorDepartamento = new GestorDepartamento(data);
         gestorTicket = new GestorTicket(data);
+        login = new Login(data);
         interfaz = new UI();
     }
 
@@ -48,6 +51,7 @@ public class Controller {
             case 6 -> imprimirUsuarios();
             case 7 -> imprimirDepartamentos();
             case 8 -> imprimirTickets();
+            case 9 -> iniciarSesion();
             case 0 -> System.exit(0);
             default -> interfaz.imprimirMensajeLn("Valor invalido");
         }
@@ -167,8 +171,9 @@ public class Controller {
 
         //Si ambos usuario y departamento existen, entonces se registra exitosamente el ticket.
         if (existeUsuario && existeDepartamento) {
-            interfaz.imprimirMensajeLn("Ticket registrado exitosamente!");
-            gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento);
+            String resultado = gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento);
+
+            interfaz.imprimirMensajeLn(resultado);
 
         } else {
             interfaz.imprimirMensajeLn("Lo sentimos. El usuario o departamento no existe!");
@@ -187,4 +192,26 @@ public class Controller {
             }
         }
     }
+
+    public void iniciarSesion() throws IOException {
+        interfaz.imprimirMensaje("Digite el id de su usuario: ");
+        int id = Integer.parseInt(interfaz.leerTexto());
+
+        Usuario usuario = gestorUsuario.buscarPorId(data.getListaUsuario(), id);
+
+        interfaz.imprimirMensaje("Digite su contraseña: ");
+        String contrasena = interfaz.leerTexto();
+
+        boolean iniciaSesion = login.iniciaSesion(usuario, contrasena);
+
+        if (!iniciaSesion) {
+            interfaz.imprimirMensajeLn("Lo sentimos. Usuario incorrecto o contraseña incorrecta!");
+        } else {
+        interfaz.imprimirMensajeLn("Inicio de sesión exitoso!");
+
+        }
+
+
+    }
+
 }
