@@ -79,23 +79,16 @@ public class Controller {
         int id = Integer.parseInt(interfaz.leerTexto());
 
 
-        boolean existeUsuario = gestorUsuario.existeUsuario(data.getListaUsuario(), id);
+        interfaz.imprimirMensajeLn(gestorUsuario.registrarUsuario(nombre, correo, contrasena, telefono, rol, id));
 
-        //Preguntar al profesor lo siguiente:
-        //¿Este proceso de buscar si existe un usuario con X correo, debe de ir en UsuarioManager o en Controller?
-        //Pregunto porque no se me ocurre como acceder de esa manera en el UsuarioManager al registrar un usuario y que verifique ya existe
-        //Retornar booleano, no objetos de negocio. Para averiguar si existe el usuario.
-        if (existeUsuario) {
-            interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un usuario con este id. Intenta de nuevo!");
-        } else {
-            gestorUsuario.registrarUsuario(nombre, correo, contrasena, telefono, rol, id);
-            interfaz.imprimirMensajeLn("Usuario registrado exitosamente!");
-        }
 
     }
 
     public void imprimirUsuarios() {
-        interfaz.imprimirMensajeLn(gestorUsuario.obtenerUsuarios().toString());
+        for (String usuario : gestorUsuario.obtenerUsuarios()) {
+
+            interfaz.imprimirMensajeLn(usuario);
+        }
     }
 
     public void registrarPalabraEmocional() throws IOException {
@@ -105,7 +98,8 @@ public class Controller {
         System.out.println("Digite la emoción: ");
         String emocion = interfaz.leerTexto();
 
-        gestorDiccionarioEmocional.registrarPalabraEmocional(palabraEmocional, emocion);
+        interfaz.imprimirMensajeLn(gestorDiccionarioEmocional.registrarPalabraEmocional(palabraEmocional, emocion));
+
     }
 
     public void registrarPalabraTecnica() throws IOException {
@@ -115,7 +109,8 @@ public class Controller {
         System.out.println("Digite la categoria: ");
         String categoria = interfaz.leerTexto();
 
-        gestorDiccionarioTecnico.registrarPalabraTecnica(palabraEmocional, categoria);
+        interfaz.imprimirMensajeLn(gestorDiccionarioTecnico.registrarPalabraTecnica(palabraEmocional, categoria));
+
     }
 
     public void registrarDepartamento() throws IOException {
@@ -132,25 +127,16 @@ public class Controller {
         int id = Integer.parseInt(interfaz.leerTexto());
 
 
-        //Este booleano verifica si ya existe un departamento con base a su ID, con el metodo existeDepartamento de la clase GestorDepartamento
-        boolean existeDepartamento = gestorDepartamento.existeDepartamento(data.getListaDepartamento(), id);
-
-        //Aca se verifica si existe o no un departamento con tal ID.
-        //Esta condicional es importante, ya que no se permiten departamentos duplicados.
-        if (existeDepartamento) {
-            interfaz.imprimirMensajeLn("Lo sentimos. Ya existe un departamento con este ID. Intenta de nuevo!");
-        } else {
-            gestorDepartamento.registrarDepartamento(nombreDepartamento, descripcion, correo, id);
-            interfaz.imprimirMensajeLn("Departamento registrado exitosamente!");
-        }
+        interfaz.imprimirMensajeLn(gestorDepartamento.registrarDepartamento(nombreDepartamento, descripcion, correo, id));
     }
 
     public void imprimirDepartamentos() {
-        interfaz.imprimirMensajeLn(gestorDepartamento.obtenerDepartamentos().toString());
+        for (String departamento : gestorDepartamento.obtenerDepartamentos()) {
+            interfaz.imprimirMensajeLn(departamento);
+        }
     }
 
     public void registrarTicket() throws IOException {
-        //El id es unico por ticket
         interfaz.imprimirMensaje("Digite el ID del ticket: ");
         int id = Integer.parseInt(interfaz.leerTexto());
 
@@ -169,25 +155,14 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el #ID del departamento: ");
         int idDepartamento = Integer.parseInt(interfaz.leerTexto());
 
-        //Estos siguientes dos booleanos --> existeUsuario y existeDepartamento, ambos utilizan sus metodos
-        //existeUsuario y existeDepartamento, para verificar la existencia de ambos con base a su ID unicos
-        boolean existeUsuario = gestorUsuario.existeUsuario(data.getListaUsuario(), idUsuario);
-        boolean existeDepartamento = gestorDepartamento.existeDepartamento(data.getListaDepartamento(), idDepartamento);
 
-        //Si ambos usuario y departamento existen, entonces se registra exitosamente el ticket.
-        if (existeUsuario && existeDepartamento) {
-            String resultado = gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento);
-
-            interfaz.imprimirMensajeLn(resultado);
-
-        } else {
-            interfaz.imprimirMensajeLn("Lo sentimos. El usuario o departamento no existe!");
-        }
-
+        interfaz.imprimirMensajeLn(gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento));
     }
 
     public void imprimirTickets() {
-        interfaz.imprimirMensajeLn(gestorTicket.obtenerTickets().toString());
+        for (String ticket : gestorTicket.obtenerTickets()) {
+            interfaz.imprimirMensajeLn(ticket);
+        }
     }
 
     public void iniciarSesion() throws IOException {
@@ -207,8 +182,6 @@ public class Controller {
             interfaz.imprimirMensajeLn("Inicio de sesión exitoso!");
 
         }
-
-
     }
 
 }
