@@ -17,6 +17,7 @@ public class Controller {
     private GestorDiccionarioTecnico gestorDiccionarioTecnico;
     private Login login;
     private UI interfaz;
+    private AnalisisBoW analisisBoW;
 
 
     public Controller() {
@@ -28,6 +29,7 @@ public class Controller {
         gestorDiccionarioTecnico = new GestorDiccionarioTecnico(data);
         login = new Login(data);
         interfaz = new UI();
+        analisisBoW = new AnalisisBoW(data);
     }
 
     public void start() throws IOException {
@@ -95,7 +97,7 @@ public class Controller {
         System.out.println("Digite la palabra: ");
         String palabraEmocional = interfaz.leerTexto();
 
-        System.out.println("Digite la emoción: ");
+        System.out.println("Digite el tipo de emoción: ");
         String emocion = interfaz.leerTexto();
 
         interfaz.imprimirMensajeLn(gestorDiccionarioEmocional.registrarPalabraEmocional(palabraEmocional, emocion));
@@ -157,6 +159,12 @@ public class Controller {
 
 
         interfaz.imprimirMensajeLn(gestorTicket.registrarTicket(id, asunto, descripcion, estado, idUsuario, idDepartamento));
+
+        interfaz.imprimirMensajeLn("Categorías sugeridas para el ticket");
+        interfaz.imprimirMensajeLn(String.valueOf(analisisBoW.detectarCategoriaTecnica(descripcion)));
+
+        interfaz.imprimirMensajeLn("Estado de animo del usuario: " + analisisBoW.detectarEstadoAnimo(descripcion));
+
     }
 
     public void imprimirTickets() {
