@@ -177,7 +177,7 @@ public class Controller {
         interfaz.imprimirMensaje("Digite el id de su usuario: ");
         int id = Integer.parseInt(interfaz.leerTexto());
 
-        Usuario usuario = gestorUsuario.buscarPorId(data.getListaUsuario(), id);
+        Usuario usuario = gestorUsuario.buscarPorId(id);
 
         interfaz.imprimirMensaje("Digite su contraseña: ");
         String contrasena = interfaz.leerTexto();
