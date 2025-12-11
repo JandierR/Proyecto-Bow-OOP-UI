@@ -11,6 +11,16 @@ public class UI {
         in = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    public void menuInicioSesion() {
+        imprimirMensajeLn("-".repeat(50));
+        imprimirMensajeLn("""
+                1. Registrar usuario
+                2. Iniciar sesión
+                0. Salir""");
+        imprimirMensajeLn("-".repeat(50));
+
+    }
+
     public void imprimirMenu() {
         imprimirMensajeLn("-".repeat(50));
         imprimirMensajeLn("""
@@ -22,7 +32,8 @@ public class UI {
                 6. Listar usuarios
                 7. Listar departamentos
                 8. Listar tickets
-                9. Iniciar sesión
+                9. Eliminar usuario
+                10. Modificar usuario
                 0. Salir""");
         imprimirMensajeLn("-".repeat(50));
     }

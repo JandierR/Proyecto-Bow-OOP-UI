@@ -1,7 +1,7 @@
 package cr.ac.ucenfotec.rojas.jandier.tl;
 
 import cr.ac.ucenfotec.rojas.jandier.UI.UI;
-import cr.ac.ucenfotec.rojas.jandier.bl.entities.*;
+import cr.ac.ucenfotec.rojas.jandier.bl.entities.Usuario;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.*;
 import cr.ac.ucenfotec.rojas.jandier.dl.Data;
 
@@ -34,6 +34,25 @@ public class Controller {
 
     public void start() throws IOException {
         int opcion;
+        boolean sesionIniciada = false;
+
+        while (!sesionIniciada) {
+            interfaz.menuInicioSesion();
+            opcion = interfaz.leerOpcion();
+
+            if (opcion == 0) {
+                interfaz.imprimirMensajeLn("Saliendo del sistema");
+                return;
+            }
+
+            if (opcion == 1) {
+                registrarUsuario();
+            } else if (opcion == 2) {
+                sesionIniciada = iniciarSesion();
+            }else {
+                interfaz.imprimirMensajeLn("Valor invalido");
+            }
+        }
 
         do {
             interfaz.imprimirMenu();
@@ -41,6 +60,16 @@ public class Controller {
             procesarOpcion(opcion);
 
         } while (opcion != 0);
+
+    }
+
+    public void procesarOpcionInicioSesion(int opcion) throws IOException {
+        switch (opcion) {
+            case 1 -> registrarUsuario();
+            case 2 -> iniciarSesion();
+            case 0 -> interfaz.imprimirMensajeLn("Saliendo del sistema");
+            default -> interfaz.imprimirMensajeLn("Valor invalido");
+        }
     }
 
     public void procesarOpcion(int opcion) throws IOException {
@@ -54,7 +83,8 @@ public class Controller {
             case 6 -> imprimirUsuarios();
             case 7 -> imprimirDepartamentos();
             case 8 -> imprimirTickets();
-            case 9 -> iniciarSesion();
+            case 9 -> eliminarUsuario();
+            case 10 -> modificarUsuario();
             case 0 -> interfaz.imprimirMensajeLn("Saliendo del sistema");
             default -> interfaz.imprimirMensajeLn("Valor invalido");
         }
@@ -82,7 +112,6 @@ public class Controller {
 
 
         interfaz.imprimirMensajeLn(gestorUsuario.registrarUsuario(nombre, correo, contrasena, telefono, rol, id));
-
 
     }
 
@@ -173,23 +202,64 @@ public class Controller {
         }
     }
 
-    public void iniciarSesion() throws IOException {
+    public boolean iniciarSesion() throws IOException {
         interfaz.imprimirMensaje("Digite el id de su usuario: ");
         int id = Integer.parseInt(interfaz.leerTexto());
+
+        boolean existeUsuario = gestorUsuario.existeUsuario(id);
+
+        if (!existeUsuario) {
+            interfaz.imprimirMensajeLn("Lo sentimos. El usuario no existe");
+            return false;
+        }
 
         Usuario usuario = gestorUsuario.buscarPorId(id);
 
         interfaz.imprimirMensaje("Digite su contraseña: ");
         String contrasena = interfaz.leerTexto();
 
-        boolean iniciaSesion = login.iniciaSesion(usuario, contrasena);
+        boolean iniciaSesion = login.iniciaSesion(usuario, contrasena, id);
 
         if (!iniciaSesion) {
             interfaz.imprimirMensajeLn("Lo sentimos. Usuario incorrecto o contraseña incorrecta!");
+            return false;
         } else {
             interfaz.imprimirMensajeLn("Inicio de sesión exitoso!");
-
+            return true;
         }
+    }
+
+    public void modificarUsuario() throws IOException {
+
+        interfaz.imprimirMensaje("Digite el #ID del usuario que desea modificar: ");
+        int id = Integer.parseInt(interfaz.leerTexto());
+
+        interfaz.imprimirMensaje("Digite el nombre del usuario: ");
+        String nombre = interfaz.leerTexto();
+
+        interfaz.imprimirMensaje("Digite el correo del usuario: ");
+        String correo = interfaz.leerTexto();
+
+        interfaz.imprimirMensaje("Digite la contraseña: ");
+        String contrasena = interfaz.leerTexto();
+
+        interfaz.imprimirMensaje("Digite el numero de telefono: ");
+        String telefono = interfaz.leerTexto();
+
+        interfaz.imprimirMensaje("Digite el rol del usuario: ");
+        String rol = interfaz.leerTexto();
+
+        Usuario usuarioModificado = new Usuario(nombre, correo, contrasena, telefono, rol, id);
+
+        interfaz.imprimirMensajeLn(gestorUsuario.modificarUsuario(usuarioModificado));
+
+    }
+
+    public void eliminarUsuario() throws IOException {
+        interfaz.imprimirMensaje("Digite el id del usuario a eliminar: ");
+        int id = Integer.parseInt(interfaz.leerTexto());
+
+        interfaz.imprimirMensajeLn(gestorUsuario.eliminarUsuario(id));
     }
 
 }
