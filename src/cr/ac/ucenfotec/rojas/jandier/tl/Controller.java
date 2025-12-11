@@ -3,13 +3,11 @@ package cr.ac.ucenfotec.rojas.jandier.tl;
 import cr.ac.ucenfotec.rojas.jandier.UI.UI;
 import cr.ac.ucenfotec.rojas.jandier.bl.entities.*;
 import cr.ac.ucenfotec.rojas.jandier.bl.logic.*;
-import cr.ac.ucenfotec.rojas.jandier.dl.Data;
 
 import java.io.IOException;
 
 
 public class Controller {
-    private Data data;
     private GestorUsuario gestorUsuario;
     private GestorDepartamento gestorDepartamento;
     private GestorTicket gestorTicket;
@@ -21,15 +19,14 @@ public class Controller {
 
 
     public Controller() {
-        data = new Data();
-        gestorUsuario = new GestorUsuario(data);
-        gestorDepartamento = new GestorDepartamento(data);
-        gestorTicket = new GestorTicket(data);
-        gestorDiccionarioEmocional = new GestorDiccionarioEmocional(data);
-        gestorDiccionarioTecnico = new GestorDiccionarioTecnico(data);
-        login = new Login(data);
+        gestorUsuario = new GestorUsuario();
+        gestorDepartamento = new GestorDepartamento();
+        gestorTicket = new GestorTicket();
+        gestorDiccionarioEmocional = new GestorDiccionarioEmocional();
+        gestorDiccionarioTecnico = new GestorDiccionarioTecnico();
+        login = new Login();
         interfaz = new UI();
-        analisisBoW = new AnalisisBoW(data);
+        analisisBoW = new AnalisisBoW();
     }
 
     public void start() throws IOException {
