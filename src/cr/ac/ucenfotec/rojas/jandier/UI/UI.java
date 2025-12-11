@@ -23,17 +23,26 @@ public class UI {
 
     public void imprimirMenu() {
         imprimirMensajeLn("-".repeat(50));
+        imprimirMensajeLn("        Elija una opción del menu: ");
+        imprimirMensajeLn("-".repeat(50));
         imprimirMensajeLn("""
-                1. Registrar usuario
-                2. Registrar departamento
-                3. Registrar ticket
-                4. Registrar palabra emocional
-                5. Registrar palabra técnica
-                6. Listar usuarios
-                7. Listar departamentos
-                8. Listar tickets
-                9. Eliminar usuario
-                10. Modificar usuario
+                1. Registrar departamento
+                2. Registrar ticket
+                3. Registrar palabra emocional
+                4. Registrar palabra técnica
+                5. Listar usuarios
+                6. Listar departamentos
+                7. Listar tickets
+                8. Eliminar usuario
+                9. Eliminar departamento
+                10. Eliminar ticket
+                11. Eliminar palabra emocional
+                12. Eliminar palabra técnica
+                13. Modificar usuario
+                14. Modificar departamento
+                15. Modificar ticket
+                16. Modificar palabra emocional
+                17. Modificar palabra técnica
                 0. Salir""");
         imprimirMensajeLn("-".repeat(50));
     }
