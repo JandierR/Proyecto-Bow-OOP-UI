@@ -82,15 +82,7 @@ Clonar ambos repositorios (Domain y UI).
 
 Configurar ambos en el mismo proyecto o como dependencias separadas.
 
-Instanciar desde UI:
-
-Data
-
-Managers desde Domain
-
-Controller
-
-InterfazUsuario
+Agregar la base de datos adjuntada.
 
 Ejecutar el método main del módulo UI.
 
